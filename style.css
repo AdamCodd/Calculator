@@ -1,0 +1,82 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#wrapper {
+    height: 500px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+#screen-wrap {
+    min-height: 100px;
+    width: 100%;
+    border: 1px solid black;
+    padding: 15px;
+    background: #333;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    background: #eeeeee;
+}
+
+.buttons {
+    display: flex;
+    flex: 1;
+}
+
+div>span {
+    padding: 20px;
+    border: 1px solid black;
+}
+
+span {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.operators {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.digits {
+    display: flex;
+    width: 75%;
+    flex-wrap: wrap;
+}
+
+.digits>div {
+    display: flex;
+    width: 100%;
+}
+
+.lastrow {
+    display: flex;
+}
+
+.lastrow span:first-child {
+    min-width: 75%;
+}
