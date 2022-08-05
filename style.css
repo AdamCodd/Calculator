@@ -66,6 +66,11 @@ span {
     width: 25%;
 }
 
+.active {
+    color: darkred;
+    font-weight: bold;
+}
+
 .digits {
     display: flex;
     width: 75%;
