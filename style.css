@@ -82,10 +82,6 @@ span {
     width: 100%;
 }
 
-.lastrow {
+.special-buttons {
     display: flex;
-}
-
-.lastrow span:first-child {
-    min-width: 75%;
 }
