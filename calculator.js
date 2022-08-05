@@ -44,7 +44,6 @@ const equal = document.querySelector('.equal');
 const clear = document.querySelector('.clear');
 
 let numbers = '';
-
 allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
         if (!digit.classList.contains('return') && !digit.classList.contains('dot')) {
@@ -55,49 +54,82 @@ allDigits.forEach(digit => {
     });
 });
 
-let firstNumbers;
 let op = '';
-let secondNumbers;
-let solution;
+let newOp = '';
+let firstNumbers = '';
+let secondNumbers = '';
+let solution = '';
 
+// Need to operate each time we change the operator OR when we push the equal operator
+// Active should be cosmetic not used here maybe use event to discriminate operators
+// secondNumbers should be dissociated from firstNumbers and not combined
 operators.forEach(operator => {
     operator.addEventListener('click', () => {
-        if (!operator.classList.contains('active')) {
-            // Save the first set of numbers and operator
-            firstNumbers = numbers;
-            operator.classList.toggle('active');
+        numbers = '';
+        if (!op) {
+            firstNumbers = showDigits.textContent;
             op = operator.dataset.id;
-            // Clear the numbers
-            numbers = '';
-            showDigits.textContent = '';
         }
+        else if (op) {
+            secondNumbers = showDigits.textContent;
+            newOp = operator.dataset.id;
+        }
+
+        if (newOp !== '' && secondNumbers !== '') {
+            //operator.classList.toggle('active');
+            console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
+            solution = operate(op, firstNumbers, secondNumbers);
+            firstNumbers = +solution;
+            secondNumbers = '';
+            showDigits.textContent = +solution;
+            op = newOp;
+        }
+
     });
 });
 
 equal.addEventListener('click', () => {
-    secondNumbers = numbers;
-
-    if (firstNumbers !== '' && op !== '' && secondNumbers !== '') {
+    console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
+    //    secondNumbers = showDigits.textContent;
+    if (solution === '' && op && secondNumbers !== '') {
         solution = operate(op, firstNumbers, secondNumbers);
-        showDigits.textContent = solution;
-
-        const sign = document.querySelector(`[data-id="${op}"]`);
-        sign.classList.toggle('active');
-
-        firstNumbers = '';
-        secondNumbers = '';
-        numbers = '';
+        showDigits.textContent = +solution;
+        firstNumbers = +solution;
     }
+    else {
+        showDigits.textContent = +firstNumbers;
+    }
+    /*   secondNumbers = numbers;
+   
+       if (firstNumbers !== '' && op !== '' && secondNumbers !== '') {
+           solution = operate(op, firstNumbers, secondNumbers);
+           showDigits.textContent = solution;
+   
+           const sign = document.querySelector(`[data-id="${op}"]`);
+           sign.classList.toggle('active');
+   
+           firstNumbers = '';
+           secondNumbers = '';
+           numbers = '';
+       }*/
 });
 
 clear.addEventListener('click', () => {
-    if (solution) solution = ''
-    if (op) {
-        const sign = document.querySelector(`[data-id="${op}"]`);
-        sign.classList.toggle('active');
-    }
-    firstNumbers = '';
-    secondNumbers = '';
     numbers = '';
     showDigits.textContent = '0';
+    solution = '';
+    op = '';
+    newOp = '';
+    firstNumbers = '';
+    secondNumbers = '';
+
+    /*  if (solution) solution = ''
+      if (op) {
+          const sign = document.querySelector(`[data-id="${op}"]`);
+          sign.classList.toggle('active');
+      }
+      firstNumbers = '';
+      secondNumbers = '';
+      numbers = '';
+      showDigits.textContent = '0';*/
 })
