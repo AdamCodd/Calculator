@@ -11,49 +11,56 @@
 </head>
 
 <body>
-    <div id="container">
-        <div id="screen-wrap">
-            <div class="screen">
-                <div class="history"></div>
-                <div class="result">0</div>
-            </div>
-        </div>
-        <div class="special-buttons">
-            <span class="delete">Delete</span>
-            <span class="clear">Clear</span>
-        </div>
-        <div class="buttons">
-            <div class="digits">
-                <div class="firstrow">
-                    <span>7</span>
-                    <span>8</span>
-                    <span>9</span>
-                </div>
-                <div class="secondrow">
-                    <span>4</span>
-                    <span>5</span>
-                    <span>6</span>
-                </div>
-                <div class="thirdrow">
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                </div>
-                <div class="fourthrow">
-                    <span>0</span>
-                    <span class="dot">.</span>
-                    <span class="equal">=</span>
+    <main>
+        <div id="container">
+            <div id="screen-wrap">
+                <div class="screen">
+                    <div class="history"></div>
+                    <div class="result">0</div>
                 </div>
             </div>
-            <div class="operators">
-                <span data-id="+" class="add">+</span>
-                <span data-id="-" class="substract">-</span>
-                <span data-id="×" class="multiply">×</span>
-                <span data-id="/" class="divide">/</span>
+            <div class="special-buttons">
+                <span class="delete">Delete</span>
+                <span class="clear">Clear</span>
+            </div>
+            <div class="buttons">
+                <div class="digits">
+                    <div class="firstrow">
+                        <span>7</span>
+                        <span>8</span>
+                        <span>9</span>
+                    </div>
+                    <div class="secondrow">
+                        <span>4</span>
+                        <span>5</span>
+                        <span>6</span>
+                    </div>
+                    <div class="thirdrow">
+                        <span>1</span>
+                        <span>2</span>
+                        <span>3</span>
+                    </div>
+                    <div class="fourthrow">
+                        <span>0</span>
+                        <span class="dot">.</span>
+                        <span class="equal">=</span>
+                    </div>
+                </div>
+                <div class="operators">
+                    <span data-id="+" class="add">+</span>
+                    <span data-id="-" class="substract">-</span>
+                    <span data-id="×" class="multiply">×</span>
+                    <span data-id="/" class="divide">/</span>
+                </div>
             </div>
         </div>
-    </div>
-
+    </main>
+    <footer>
+        <span id="copyright">Copyright &copy;
+            <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            – <a href="https://github.com/AdamCodd/Calculator" title="Github">AdamCodd</a>
+        </span>
+    </footer>
 </body>
 
 </html>
