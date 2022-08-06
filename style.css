@@ -34,11 +34,13 @@ body {
 
 .screen {
     height: 100%;
+    font-size: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     border: 1px solid black;
     background: #eeeeee;
-    line-height: 1.5;
     padding-right: 20px;
-    font-size: 3rem;
     text-align: right;
 }
 
