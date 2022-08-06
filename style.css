@@ -61,10 +61,6 @@ body {
     line-height: 1;
 }
 
-.result {
-    margin-bottom: 10px;
-}
-
 .buttons {
     display: flex;
     flex: 1;
