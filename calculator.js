@@ -56,8 +56,13 @@ allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
         if (!digit.classList.contains('equal') && !digit.classList.contains('dot')) {
             numbers += digit.textContent;
-            showDigits.textContent = numbers;
         }
+
+        if (digit.classList.contains('dot') && !numbers.includes('.')) {
+            (numbers === '') ? numbers += "0." : numbers += ".";
+        }
+
+        showDigits.textContent = numbers;
     });
 });
 
@@ -93,10 +98,11 @@ equal.addEventListener('click', () => {
     if (numbers !== '') {
         isFirstOp = true;
         secondNumbers = +numbers;
-        const getOpSign = [...document.getElementsByClassName(op)][0].dataset.id;
-        showHistory.textContent = `${firstNumbers} ${getOpSign} ${secondNumbers} ${equal.textContent}`;
 
         if (secondNumbers !== '' && op !== '') {
+            const getOpSign = [...document.getElementsByClassName(op)][0].dataset.id;
+            showHistory.textContent = `${firstNumbers} ${getOpSign} ${secondNumbers} ${equal.textContent}`;
+
             solution = operate(op, firstNumbers, secondNumbers);
             Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
             firstNumbers = showDigits.textContent = solution;
