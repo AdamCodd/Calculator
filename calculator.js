@@ -47,7 +47,8 @@ const clear = document.querySelector('.clear');
 let numbers, firstNumbers, secondNumbers, solution;
 let op, newOp, isFirstOp;
 function reset() {
-    numbers = firstNumbers = secondNumbers = solution = op = newOp = showHistory.textContent = '';
+    firstNumbers = secondNumbers = solution = op = newOp = showHistory.textContent = '';
+    numbers = '0';
     isFirstOp = true;
 }
 reset();
@@ -55,54 +56,62 @@ reset();
 allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
         if (!digit.classList.contains('equal') && !digit.classList.contains('dot')) {
+            if (numbers === '0') numbers = '';
             numbers += digit.textContent;
+            showDigits.textContent = numbers;
         }
 
         if (digit.classList.contains('dot') && !numbers.includes('.')) {
-            (numbers === '') ? numbers += "0." : numbers += ".";
+            numbers += ".";
+            showDigits.textContent = numbers;
         }
-
-        showDigits.textContent = numbers;
     });
 });
 
 operators.forEach(operator => {
     operator.addEventListener('click', () => {
-        if (numbers !== '') {
-            if (isFirstOp === true) {
-                op = operator.className;
-                if (firstNumbers === '') firstNumbers = +numbers;
-                showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
+        if (isFirstOp === true) {
+            op = operator.className;
+            if (firstNumbers === '') firstNumbers = +numbers;
+            showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
+            numbers = secondNumbers = '';
+        }
+
+        if (isFirstOp === false) {
+            secondNumbers = +numbers;
+            console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
+            newOp = operator.className;
+            if (op === 'divide' && secondNumbers == '0') {
+                showDigits.textContent = "Can't divide by 0 bro!";
                 numbers = secondNumbers = '';
+                op = newOp;
             }
-
-            if (isFirstOp === false) {
-                secondNumbers = +numbers;
-                console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
-                newOp = operator.className;
-
+            else {
                 solution = operate(op, firstNumbers, secondNumbers);
                 Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
                 firstNumbers = showDigits.textContent = solution;
-
                 showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
                 numbers = secondNumbers = '';
                 op = newOp;
             }
-            isFirstOp = false;
         }
+        isFirstOp = false;
+
     });
 });
 
 equal.addEventListener('click', () => {
-    if (numbers !== '') {
-        isFirstOp = true;
-        secondNumbers = +numbers;
+    isFirstOp = true;
+    secondNumbers = +numbers;
 
-        if (secondNumbers !== '' && op !== '') {
-            const getOpSign = [...document.getElementsByClassName(op)][0].dataset.id;
-            showHistory.textContent = `${firstNumbers} ${getOpSign} ${secondNumbers} ${equal.textContent}`;
-
+    if (op !== '' && firstNumbers !== '' && secondNumbers !== '') {
+        const getOpSign = [...document.getElementsByClassName(op)][0].dataset.id;
+        showHistory.textContent = `${firstNumbers} ${getOpSign} ${secondNumbers} ${equal.textContent}`;
+        if (op === 'divide' && secondNumbers == '0') {
+            showDigits.textContent = "Can't divide by 0 bro!";
+            numbers = secondNumbers = '';
+        }
+        else {
             solution = operate(op, firstNumbers, secondNumbers);
             Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
             firstNumbers = showDigits.textContent = solution;
