@@ -43,6 +43,7 @@ const allDigits = document.querySelectorAll('.digits span');
 const operators = document.querySelectorAll('.operators span');
 const equal = document.querySelector('.equal');
 const clear = document.querySelector('.clear');
+const erase = document.querySelector('.delete');
 
 let numbers, firstNumbers, secondNumbers, solution;
 let op, newOp, isFirstOp;
@@ -61,11 +62,25 @@ allDigits.forEach(digit => {
             showDigits.textContent = numbers;
         }
 
-        if (digit.classList.contains('dot') && !numbers.includes('.')) {
+        if (digit.classList.contains('dot') && !numbers.includes('.') && numbers !== '') {
             numbers += ".";
             showDigits.textContent = numbers;
         }
     });
+});
+
+erase.addEventListener('click', () => {
+    if (solution === '') {
+        let arr = numbers.split('');
+        console.log(arr);
+        numbers = arr.slice(0, -1).join('');
+        showDigits.textContent = numbers;
+    }
+    else {
+        let arr = solution.toString().split('');
+        solution = Number(arr.slice(0, -1).join(''));
+        firstNumbers = showDigits.textContent = solution;
+    }
 });
 
 operators.forEach(operator => {
