@@ -38,16 +38,16 @@ function operate(op, a, b) {
 }
 
 const showDigits = document.querySelector('.result');
+const showHistory = document.querySelector('.history');
 const allDigits = document.querySelectorAll('.digits span');
 const operators = document.querySelectorAll('.operators span');
 const equal = document.querySelector('.equal');
 const clear = document.querySelector('.clear');
 
-
 let numbers, firstNumbers, secondNumbers, solution;
 let op, newOp, isFirstOp;
 function reset() {
-    numbers = firstNumbers = secondNumbers = solution = op = newOp = '';
+    numbers = firstNumbers = secondNumbers = solution = op = newOp = showHistory.textContent = '';
     isFirstOp = true;
 }
 reset();
@@ -65,20 +65,22 @@ operators.forEach(operator => {
     operator.addEventListener('click', () => {
         if (numbers !== '') {
             if (isFirstOp === true) {
-                op = operator.dataset.id;
+                op = operator.className;
                 if (firstNumbers === '') firstNumbers = +numbers;
+                showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
                 numbers = secondNumbers = '';
             }
 
             if (isFirstOp === false) {
                 secondNumbers = +numbers;
                 console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
-                newOp = operator.dataset.id;
+                newOp = operator.className;
 
                 solution = operate(op, firstNumbers, secondNumbers);
                 Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
                 firstNumbers = showDigits.textContent = solution;
 
+                showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
                 numbers = secondNumbers = '';
                 op = newOp;
             }
@@ -91,6 +93,8 @@ equal.addEventListener('click', () => {
     if (numbers !== '') {
         isFirstOp = true;
         secondNumbers = +numbers;
+        const getOpSign = [...document.getElementsByClassName(op)][0].dataset.id;
+        showHistory.textContent = `${firstNumbers} ${getOpSign} ${secondNumbers} ${equal.textContent}`;
 
         if (secondNumbers !== '' && op !== '') {
             solution = operate(op, firstNumbers, secondNumbers);
