@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Digital';
+    src: url('fonts/digital-7.ttf') format('truetype');
+}
+
 html {
     box-sizing: border-box;
 }
@@ -34,6 +39,7 @@ body {
 
 .screen {
     height: 100%;
+    font-family: 'Digital', sans-serif;
     font-size: 3rem;
     display: flex;
     flex-direction: column;
@@ -51,6 +57,11 @@ body {
 .result,
 .history {
     overflow: auto;
+    line-height: 1;
+}
+
+.result {
+    margin-bottom: 10px;
 }
 
 .buttons {
@@ -59,9 +70,10 @@ body {
 }
 
 div>span {
+    font-family: 'Digital', sans-serif;
     padding: 20px;
     border: 1px solid black;
-    font-size: 1.5rem;
+    font-size: 1.9rem;
 }
 
 span {
