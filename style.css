@@ -48,6 +48,11 @@ body {
     font-size: 2.5rem;
 }
 
+.result,
+.history {
+    overflow: auto;
+}
+
 .buttons {
     display: flex;
     flex: 1;
