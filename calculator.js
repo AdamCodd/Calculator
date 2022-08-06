@@ -15,8 +15,8 @@ function divide(a, b) {
 }
 
 function operate(op, a, b) {
-    a = Number.parseFloat(a);
-    b = Number.parseFloat(b);
+    a = Number.parseFloat(a, 10);
+    b = Number.parseFloat(b, 10);
     let result;
     switch (op) {
         case 'add':
@@ -37,7 +37,7 @@ function operate(op, a, b) {
     return result;
 }
 
-const showDigits = document.querySelector('.screen');
+const showDigits = document.querySelector('.result');
 const allDigits = document.querySelectorAll('.digits span');
 const operators = document.querySelectorAll('.operators span');
 const equal = document.querySelector('.equal');
@@ -76,8 +76,8 @@ operators.forEach(operator => {
                 newOp = operator.dataset.id;
 
                 solution = operate(op, firstNumbers, secondNumbers);
-                Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
-                firstNumbers = showDigits.textContent = +solution;
+                Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
+                firstNumbers = showDigits.textContent = solution;
 
                 numbers = secondNumbers = '';
                 op = newOp;
@@ -94,8 +94,8 @@ equal.addEventListener('click', () => {
 
         if (secondNumbers !== '' && op !== '') {
             solution = operate(op, firstNumbers, secondNumbers);
-            Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
-            firstNumbers = showDigits.textContent = +solution;
+            Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
+            firstNumbers = showDigits.textContent = solution;
 
             console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
             secondNumbers = op = '';
