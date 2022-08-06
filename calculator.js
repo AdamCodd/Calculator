@@ -15,20 +15,20 @@ function divide(a, b) {
 }
 
 function operate(op, a, b) {
-    a = Number.parseInt(a);
-    b = Number.parseInt(b);
+    a = Number.parseFloat(a);
+    b = Number.parseFloat(b);
     let result;
     switch (op) {
-        case "add":
+        case 'add':
             result = add(a, b);
             break;
-        case "substract":
+        case 'substract':
             result = substract(a, b);
             break;
-        case "multiply":
+        case 'multiply':
             result = multiply(a, b);
             break;
-        case "divide":
+        case 'divide':
             result = divide(a, b);
             break;
         default:
@@ -43,61 +43,67 @@ const operators = document.querySelectorAll('.operators span');
 const equal = document.querySelector('.equal');
 const clear = document.querySelector('.clear');
 
-let numbers = '';
+
+let numbers, firstNumbers, secondNumbers, solution;
+let op, newOp, isFirstOp;
+function reset() {
+    numbers = firstNumbers = secondNumbers = solution = op = newOp = '';
+    isFirstOp = true;
+}
+reset();
 
 allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
-        if (!digit.classList.contains('return') && !digit.classList.contains('dot')) {
+        if (!digit.classList.contains('equal') && !digit.classList.contains('dot')) {
             numbers += digit.textContent;
             showDigits.textContent = numbers;
         }
-        else { return; }
     });
 });
 
-let firstNumbers;
-let op = '';
-let secondNumbers;
-let solution;
-
 operators.forEach(operator => {
     operator.addEventListener('click', () => {
-        if (!operator.classList.contains('active')) {
-            // Save the first set of numbers and operator
-            firstNumbers = numbers;
-            operator.classList.toggle('active');
-            op = operator.dataset.id;
-            // Clear the numbers
-            numbers = '';
-            showDigits.textContent = '';
+        if (numbers !== '') {
+            if (isFirstOp === true) {
+                op = operator.dataset.id;
+                if (firstNumbers === '') firstNumbers = +numbers;
+                numbers = secondNumbers = '';
+            }
+
+            if (isFirstOp === false) {
+                secondNumbers = +numbers;
+                console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
+                newOp = operator.dataset.id;
+
+                solution = operate(op, firstNumbers, secondNumbers);
+                Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
+                firstNumbers = showDigits.textContent = +solution;
+
+                numbers = secondNumbers = '';
+                op = newOp;
+            }
+            isFirstOp = false;
         }
     });
 });
 
 equal.addEventListener('click', () => {
-    secondNumbers = numbers;
+    if (numbers !== '') {
+        isFirstOp = true;
+        secondNumbers = +numbers;
 
-    if (firstNumbers !== '' && op !== '' && secondNumbers !== '') {
-        solution = operate(op, firstNumbers, secondNumbers);
-        showDigits.textContent = solution;
+        if (secondNumbers !== '' && op !== '') {
+            solution = operate(op, firstNumbers, secondNumbers);
+            Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
+            firstNumbers = showDigits.textContent = +solution;
 
-        const sign = document.querySelector(`[data-id="${op}"]`);
-        sign.classList.toggle('active');
-
-        firstNumbers = '';
-        secondNumbers = '';
-        numbers = '';
+            console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
+            secondNumbers = op = '';
+        }
     }
 });
 
 clear.addEventListener('click', () => {
-    if (solution) solution = ''
-    if (op) {
-        const sign = document.querySelector(`[data-id="${op}"]`);
-        sign.classList.toggle('active');
-    }
-    firstNumbers = '';
-    secondNumbers = '';
-    numbers = '';
     showDigits.textContent = '0';
-})
+    reset();
+});
