@@ -15,20 +15,20 @@ function divide(a, b) {
 }
 
 function operate(op, a, b) {
-    a = Number.parseInt(a);
-    b = Number.parseInt(b);
+    a = Number.parseFloat(a);
+    b = Number.parseFloat(b);
     let result;
     switch (op) {
-        case "add":
+        case 'add':
             result = add(a, b);
             break;
-        case "substract":
+        case 'substract':
             result = substract(a, b);
             break;
-        case "multiply":
+        case 'multiply':
             result = multiply(a, b);
             break;
-        case "divide":
+        case 'divide':
             result = divide(a, b);
             break;
         default:
@@ -54,7 +54,7 @@ reset();
 
 allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
-        if (!digit.classList.contains('return') && !digit.classList.contains('dot')) {
+        if (!digit.classList.contains('equal') && !digit.classList.contains('dot')) {
             numbers += digit.textContent;
             showDigits.textContent = numbers;
         }
@@ -63,22 +63,23 @@ allDigits.forEach(digit => {
 
 operators.forEach(operator => {
     operator.addEventListener('click', () => {
-        if (numbers !== "") {
-            if (isFirstOp == true) {
+        if (numbers !== '') {
+            if (isFirstOp === true) {
                 op = operator.dataset.id;
-                firstNumbers = numbers;
-                numbers = "";
+                if (firstNumbers === '') firstNumbers = +numbers;
+                numbers = secondNumbers = '';
             }
-            if (isFirstOp == false) {
-                secondNumbers = numbers;
+
+            if (isFirstOp === false) {
+                secondNumbers = +numbers;
                 console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
                 newOp = operator.dataset.id;
-                if (secondNumbers !== "") {
-                    solution = operate(op, firstNumbers, secondNumbers);
-                }
+
+                solution = operate(op, firstNumbers, secondNumbers);
+                Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
                 firstNumbers = showDigits.textContent = +solution;
-                secondNumbers = '';
-                numbers = '';
+
+                numbers = secondNumbers = '';
                 op = newOp;
             }
             isFirstOp = false;
@@ -86,17 +87,19 @@ operators.forEach(operator => {
     });
 });
 
-// Not fully functional
 equal.addEventListener('click', () => {
-    console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
+    if (numbers !== '') {
+        isFirstOp = true;
+        secondNumbers = +numbers;
 
-    if (solution === '' && op && secondNumbers !== '') {
-        solution = operate(op, firstNumbers, secondNumbers);
-        showDigits.textContent = +solution;
-        firstNumbers = +solution;
-    }
-    else {
-        showDigits.textContent = +firstNumbers;
+        if (secondNumbers !== '' && op !== '') {
+            solution = operate(op, firstNumbers, secondNumbers);
+            Number.isInteger(solution) ? '' : solution = solution.toFixed(3);
+            firstNumbers = showDigits.textContent = +solution;
+
+            console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
+            secondNumbers = op = '';
+        }
     }
 });
 
