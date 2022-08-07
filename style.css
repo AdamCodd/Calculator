@@ -5,6 +5,7 @@
 
 html {
     box-sizing: border-box;
+    outline: 0;
 }
 
 *,
@@ -15,26 +16,21 @@ html {
     margin: 0;
 }
 
-body {
-    min-height: 100vh;
+main {
+    user-select: none;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    margin-top: 30px;
 }
 
 #container {
-    height: 600px;
     width: 500px;
-    display: flex;
-    flex-direction: column;
 }
 
 #screen-wrap {
-    /* min-height: 100px; */
-    width: 100%;
     border: 2px solid black;
-    border-bottom: 1px solid #7c6969;
+    border-bottom: 0;
     padding: 15px;
     background: #7c6969;
     border-radius: 15px 15px 0px 0px;
@@ -42,6 +38,7 @@ body {
 
 .screen {
     height: 100%;
+    min-height: 90px;
     font-family: 'Digital', sans-serif;
     font-size: 3rem;
     display: flex;
@@ -68,63 +65,97 @@ body {
 
 .buttons {
     display: flex;
-    flex: 1 0 400px;
-    min-height: 400px;
-    background: #333;
-    border-radius: 15px;
+    flex: 1;
+    background: #7c6969;
+    border-radius: 0px 0px 15px 15px;
+    border: 2px solid black;
+    border-top: 0;
+    border-bottom: 5px solid black;
 }
 
-.buttons span {
-    background: #c4d2f2 content-box;
-    box-shadow: inset 0 0 2px 15px #7c6969;
-}
-
-#container span,
-button {
-    font-family: 'Digital', sans-serif;
-    padding: 19px;
-    font-size: 1.9rem;
+.buttons button {
     display: flex;
     flex: 1;
+    font-family: 'Digital', sans-serif;
+    margin: 14px;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 2rem;
     justify-content: center;
     align-items: center;
+    box-shadow: 0px 1px 0px 1px #333;
+    cursor: pointer;
 }
 
-button {
-    font-size: 2.7em;
+.buttons button:active {
+    box-shadow: unset;
+    color: #a10808;
+}
+
+.buttons button:hover {
+    background: lightgrey;
+}
+
+.special-buttons {
+    display: flex;
+    padding: 15px 20px 20px 20px;
+    background: #7c6969;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+.special-buttons button {
+    display: flex;
+    flex: 1;
+    font-size: 2.4em;
+    font-family: 'Digital', sans-serif;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 button.delete,
 button.clear {
     align-items: baseline;
-    box-shadow: inset 0 0 2px 12px #7c6969;
+    box-shadow: 0px 1px 0px 1px #333;
+    padding: 14px;
+    color: black;
+}
+
+button.delete:hover,
+button.clear:hover {
     color: white;
+    transition: .3s;
+}
+
+button.delete:hover {
+    background: #d60707;
+}
+
+button.clear:hover {
+    background: #30cb58;
+}
+
+button.delete:active,
+button.clear:active {
+    box-shadow: unset;
 }
 
 button.delete {
-    background: #cb3071 border-box;
-    border-bottom: 2px solid black;
-    border-top: 2px solid black;
-    border-right: 1px solid black;
-    border-left: 2px solid black;
+    background: #cb3071;
+    border: 2px solid black;
+    border-radius: 10px;
+    margin-right: 20px;
 }
 
 button.clear {
-    border-top: 2px solid black;
-    border-left: 0;
-    background: #30cb58 border-box;
+    border: 2px solid black;
+    border-radius: 10px;
+    background: #1a9b3b;
 }
 
-span.dot {
+.dot {
     font-weight: 800;
-}
-
-.fourthrow span:first-child {
-    border-radius: 0px 0px 0px 15px;
-}
-
-.divide {
-    border-radius: 0px 0px 15px 0;
 }
 
 .operators {
@@ -133,10 +164,18 @@ span.dot {
     width: 25%;
 }
 
-.active {
-    color: darkred;
-    font-weight: bold;
+.operators button {
+    background: navajowhite;
 }
+
+.operators button:hover {
+    background: #d5b588;
+}
+
+.operators button:active {
+    color: antiquewhite;
+}
+
 
 .digits {
     display: flex;
@@ -149,21 +188,21 @@ span.dot {
     width: 100%;
 }
 
-.special-buttons {
+footer {
     display: flex;
+    justify-content: center;
 }
 
 #copyright {
     padding: 40px 0px 20px 0;
     font-size: 1.2em;
-    display: block;
 }
 
 @media only screen and (max-width: 600px) {
     div#container {
-        width: 96%;
-        height: auto;
         min-height: 500px;
         margin: auto;
+        max-width: 100%;
+        padding: 10px;
     }
 }

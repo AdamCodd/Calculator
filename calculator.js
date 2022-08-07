@@ -32,15 +32,15 @@ function operate(op, a, b) {
             result = divide(a, b);
             break;
         default:
-            console.log('Operator error!', op);
+            console.error('Operator error!', op);
     }
     return result;
 }
 
 const showDigits = document.querySelector('.result');
 const showHistory = document.querySelector('.history');
-const allDigits = document.querySelectorAll('.digits span');
-const operators = document.querySelectorAll('.operators span');
+const allDigits = document.querySelectorAll('.digits button');
+const operators = document.querySelectorAll('.operators button');
 const equal = document.querySelector('.equal');
 const clear = document.querySelector('.clear');
 const erase = document.querySelector('.delete');
@@ -72,7 +72,6 @@ allDigits.forEach(digit => {
 erase.addEventListener('click', () => {
     if (solution === '') {
         let arr = numbers.split('');
-        console.log(arr);
         numbers = arr.slice(0, -1).join('');
         showDigits.textContent = numbers;
     }
@@ -88,13 +87,13 @@ operators.forEach(operator => {
         if (isFirstOp === true) {
             op = operator.className;
             if (firstNumbers === '') firstNumbers = +numbers;
-            showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
+            showHistory.textContent = `${firstNumbers} ${operator.dataset.id}`;
             numbers = secondNumbers = '';
         }
 
         if (isFirstOp === false) {
             secondNumbers = +numbers;
-            console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
+            // console.log(op, `First: ${firstNumbers}`, `Second: ${secondNumbers}`);
             newOp = operator.className;
             if (op === 'divide' && secondNumbers == '0') {
                 showDigits.textContent = "Can't divide by 0 bro!";
@@ -105,7 +104,7 @@ operators.forEach(operator => {
                 solution = operate(op, firstNumbers, secondNumbers);
                 Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
                 firstNumbers = showDigits.textContent = solution;
-                showHistory.textContent = `${firstNumbers} ${operator.textContent}`;
+                showHistory.textContent = `${firstNumbers} ${operator.dataset.id}`;
                 numbers = secondNumbers = '';
                 op = newOp;
             }
@@ -131,7 +130,7 @@ equal.addEventListener('click', () => {
             Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
             firstNumbers = showDigits.textContent = solution;
 
-            console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
+            //console.log("Solution: " + solution, "First: " + firstNumbers, "Second: " + secondNumbers, "Op:" + op);
             secondNumbers = op = '';
         }
     }
