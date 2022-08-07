@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="calculator.js" defer></script>
+</head>
+
+<body>
+    <main>
+        <div id="container">
+            <div id="screen-wrap">
+                <div class="screen">
+                    <div class="history"></div>
+                    <div class="result">0</div>
+                </div>
+            </div>
+            <div class="special-buttons">
+                <button data-key="Backspace" class="delete">Delete</button>
+                <button data-key="Delete" class="clear">Clear</button>
+            </div>
+            <div class="buttons">
+                <div class="digits">
+                    <div class="firstrow">
+                        <button data-key="7">7</button>
+                        <button data-key="8">8</button>
+                        <button data-key="9">9</button>
+                    </div>
+                    <div class="secondrow">
+                        <button data-key="4">4</button>
+                        <button data-key="5">5</button>
+                        <button data-key="6">6</button>
+                    </div>
+                    <div class="thirdrow">
+                        <button data-key="1">1</button>
+                        <button data-key="2">2</button>
+                        <button data-key="3">3</button>
+                    </div>
+                    <div class="fourthrow">
+                        <button data-key="0">0</button>
+                        <button data-key="." class="dot">.</button>
+                        <button data-key="=" class="equal">=</button>
+                    </div>
+                </div>
+                <div class="operators">
+                    <button data-id="+" data-key="+" class="add">+</button>
+                    <button data-id="-" data-key="-" class="substract">-</button>
+                    <button data-id="×" data-key="*" class="multiply">*</button>
+                    <button data-id="÷" data-key="/" class="divide">/</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <span id="copyright">Copyright &copy;
+            <script>document.getElementById('copyright').appendChild(document.createTextNode(new Date().getFullYear()))</script>
+            – <a href="https://github.com/AdamCodd/Calculator" title="Github">AdamCodd</a>
+        </span>
+    </footer>
+</body>
+
+</html>
