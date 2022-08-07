@@ -47,12 +47,48 @@ const erase = document.querySelector('.delete');
 
 let numbers, firstNumbers, secondNumbers, solution;
 let op, newOp, isFirstOp;
+
 function reset() {
     firstNumbers = secondNumbers = solution = op = newOp = showHistory.textContent = '';
     numbers = '0';
     isFirstOp = true;
 }
 reset();
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === "\'" || e.key === "\"") return;
+    const key = document.querySelector(`button[data-key="${e.key}"]`);
+    console.log(key, e.key);
+    if (!key) return;
+    if (e.key === "=") {
+        let clickEqual = new Event('click');
+        equal.dispatchEvent(clickEqual);
+    }
+    else if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") {
+        let clickSign = new Event('click');
+        operators.forEach(operator => {
+            if (operator.dataset.key === e.key) {
+                operator.dispatchEvent(clickSign);
+            }
+        })
+    }
+    else if (e.key === "Backspace") {
+        let clickErase = new Event('click');
+        erase.dispatchEvent(clickErase);
+    }
+    else if (e.key === "Delete") {
+        let clickClear = new Event('click');
+        clear.dispatchEvent(clickClear);
+    }
+    else {
+        let clickDigit = new Event('click');
+        allDigits.forEach(digit => {
+            if (digit.dataset.key === e.key) {
+                digit.dispatchEvent(clickDigit);
+            }
+        });
+    }
+});
 
 allDigits.forEach(digit => {
     digit.addEventListener('click', () => {
