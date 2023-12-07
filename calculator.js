@@ -69,21 +69,31 @@ function inputDecimal() {
 
 // Handle delete input
 function deleteDigit() {
+    // Delete the last digit or set current input to zero if all digits are deleted
     currentInput = currentInput.slice(0, -1) || '0';
     updateDisplay();
 }
 
 // Handle operator input
 function inputOperator(operator) {
-    if (currentOperator !== null && !resetScreen) {
+    if (currentInput === '' || currentInput === '0') {
+        // If current input is empty or zero, use the previous result
         if (previousInput !== '') {
-            currentInput = String(operate(currentOperator, previousInput, currentInput));
+            currentOperator = operator;
+            resetScreen = true;
             updateDisplay();
         }
+        // Do nothing if there's no previous result
+    } else {
+        // Perform calculation if an operator was already chosen
+        if (currentOperator !== null && !resetScreen) {
+            currentInput = String(operate(currentOperator, previousInput, currentInput));
+        }
+        previousInput = currentInput;
+        currentOperator = operator;
+        resetScreen = true;
+        updateDisplay();
     }
-    previousInput = currentInput;
-    currentOperator = operator;
-    resetScreen = true;
 }
 
 // Perform calculation and update display
