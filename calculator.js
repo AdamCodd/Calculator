@@ -1,138 +1,122 @@
-const showDigits = document.querySelector('.result');
-const showHistory = document.querySelector('.history');
-const allDigits = document.querySelectorAll('.digits button[data-key]');
-const operators = document.querySelectorAll('.operators button');
-const equal = document.querySelector('.equal');
-const clear = document.querySelector('.clear');
-const erase = document.querySelector('.delete');
-const dot = document.querySelector('.dot');
+// Selecting DOM elements
+const displayCurrent = document.querySelector('.result');
+const displayHistory = document.querySelector('.history');
+const digitButtons = document.querySelectorAll('.digits button[data-key]');
+const operatorButtons = document.querySelectorAll('.operators button');
+const equalsButton = document.querySelector('.equal');
+const clearButton = document.querySelector('.clear');
+const deleteButton = document.querySelector('.delete');
+const decimalButton = document.querySelector('.dot');
 
-let firstNumbers, secondNumbers, solution;
-let op, isFirstOp;
+// Variables for calculator state
+let currentInput = '';
+let previousInput = '';
+let currentOperator = null;
+let resetScreen = false;
 
-function reset() {
-    firstNumbers = secondNumbers = solution = op = showDigits.textContent = showHistory.textContent = '';
-    isFirstOp = true;
-}
-reset();
-
-function add(a, b) {
-    return a + b;
-}
-function substract(a, b) {
-    return a - b;
-}
-function multiply(a, b) {
-    return a * b;
-}
-function divide(a, b) {
-    return a / b;
+// Reset calculator to initial state
+function resetCalculator() {
+    currentInput = '0';
+    previousInput = '';
+    currentOperator = null;
+    resetScreen = false;
+    updateDisplay();
 }
 
-function operate(op, a, b) {
-    a = Number.parseFloat(a, 10);
-    b = Number.parseFloat(b, 10);
-    switch (op) {
-        case '+':
-            return add(a, b);
-        case '-':
-            return substract(a, b);
-        case '*':
-            return multiply(a, b);
-        case '/':
-            if (b === 0) return '';
-            else return divide(a, b);
-        default:
-            console.error('Operator error!', op);
+// Update display screen
+function updateDisplay() {
+    displayCurrent.textContent = currentInput;
+    displayHistory.textContent = previousInput;
+}
+
+// Basic arithmetic functions
+const add = (a, b) => a + b;
+const subtract = (a, b) => a - b;
+const multiply = (a, b) => a * b;
+const divide = (a, b) => b !== 0 ? a / b : null;
+
+// Perform calculation based on operator
+function operate(operator, a, b) {
+    a = parseFloat(a);
+    b = parseFloat(b);
+    switch (operator) {
+        case '+': return add(a, b);
+        case '-': return subtract(a, b);
+        case '*': return multiply(a, b);
+        case '/': return divide(a, b);
+        default: return null;
     }
 }
 
-function addNumbers(num) {
-    if (showDigits.textContent === '0') showDigits.textContent = '';
-    showDigits.textContent += num;
-}
-
-allDigits.forEach(digit => {
-    digit.addEventListener('click', () => {
-        addNumbers(digit.textContent);
-    });
-});
-
-dot.addEventListener('click', () => {
-    if (!showDigits.textContent.includes('.')) showDigits.textContent += '.';
-})
-
-erase.addEventListener('click', () => {
-    if (showDigits.textContent === '0') showDigits.textContent = '';
-    showDigits.textContent = showDigits.textContent.toString().slice(0, -1);
-});
-
-function operation(operator) {
-    if (isFirstOp === false) evaluate();
-    if (isFirstOp === true) {
-        op = operator;
-        firstNumbers = showDigits.textContent;
-        showHistory.textContent = `${firstNumbers} ${op}`;
-        showDigits.textContent = '';
-        isFirstOp = false;
+// Handle digit button click
+function inputDigit(digit) {
+    if (resetScreen) {
+        currentInput = digit;
+        resetScreen = false;
+    } else {
+        currentInput = currentInput === '0' ? digit : currentInput + digit;
     }
+    updateDisplay();
 }
 
+// Handle decimal input
+function inputDecimal() {
+    if (!currentInput.includes('.')) {
+        currentInput += '.';
+    }
+    updateDisplay();
+}
+
+// Handle delete input
+function deleteDigit() {
+    currentInput = currentInput.slice(0, -1) || '0';
+    updateDisplay();
+}
+
+// Handle operator input
+function inputOperator(operator) {
+    if (currentOperator !== null && !resetScreen) {
+        if (previousInput !== '') {
+            currentInput = String(operate(currentOperator, previousInput, currentInput));
+            updateDisplay();
+        }
+    }
+    previousInput = currentInput;
+    currentOperator = operator;
+    resetScreen = true;
+}
+
+// Perform calculation and update display
 function evaluate() {
-    if (isFirstOp === true) return;
-
-    secondNumbers = showDigits.textContent;
-
-    if (op === '/' && secondNumbers === "0") {
-        alert("Can't divide by 0 bro!");
+    if (currentOperator === null || resetScreen) return;
+    const calculation = operate(currentOperator, previousInput, currentInput);
+    if (calculation === null) {
+        alert("Can't divide by zero!");
         return;
     }
-
-    if (secondNumbers !== '') solution = operate(op, firstNumbers, secondNumbers);
-    Number.isInteger(solution) ? '' : solution = Number(solution.toFixed(3));
-    showDigits.textContent = solution;
-
-    showHistory.textContent = `${firstNumbers} ${op} ${secondNumbers} =`;
-    secondNumbers = '';
-    isFirstOp = true;
+    currentInput = String(calculation);
+    currentOperator = null;
+    resetScreen = true;
+    updateDisplay();
 }
 
-operators.forEach(operator => {
-    operator.addEventListener('click', () => {
-        operation(operator.textContent);
-    });
-});
+// Adding event listeners to buttons
+digitButtons.forEach(button => button.addEventListener('click', () => inputDigit(button.textContent)));
+operatorButtons.forEach(button => button.addEventListener('click', () => inputOperator(button.textContent)));
+equalsButton.addEventListener('click', evaluate);
+clearButton.addEventListener('click', resetCalculator);
+deleteButton.addEventListener('click', deleteDigit);
+decimalButton.addEventListener('click', inputDecimal);
 
-equal.addEventListener('click', evaluate);
-
-clear.addEventListener('click', () => {
-    showDigits.textContent = '0';
-    reset();
-});
+// Initialize calculator
+resetCalculator();
 
 // Keyboard support
 window.addEventListener('keydown', (e) => {
-    if (e.key === "=") {
-        let clickEqual = new Event('click');
-        equal.dispatchEvent(clickEqual);
-    }
-    else if (e.key === "+" || e.key === "-" || e.key === "*" || e.key === "/") {
-        operation(e.key);
-    }
-    else if (e.key === ".") {
-        let clickDot = new Event('click');
-        dot.dispatchEvent(clickDot);
-    }
-    else if (e.key === "Backspace") {
-        let clickErase = new Event('click');
-        erase.dispatchEvent(clickErase);
-    }
-    else if (e.key === "Delete") {
-        let clickClear = new Event('click');
-        clear.dispatchEvent(clickClear);
-    }
-    else if (e.key >= 0 && e.key <= 9) {
-        addNumbers(e.key);
-    }
-
+    if (e.key.match(/[0-9]/)) inputDigit(e.key);
+    else if (e.key === '.') inputDecimal();
+    else if (e.key.match(/[\+\-\*\/]/)) inputOperator(e.key);
+    else if (e.key === 'Enter' || e.key === '=') evaluate();
+    else if (e.key === 'Backspace') deleteDigit();
+    else if (e.key === 'Escape') resetCalculator();
 });
