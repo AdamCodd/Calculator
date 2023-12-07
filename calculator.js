@@ -26,8 +26,13 @@ function resetCalculator() {
 // Update display screen
 function updateDisplay() {
     displayCurrent.textContent = currentInput;
-    displayHistory.textContent = previousInput + ' ' + (currentOperator ? currentOperator : '');
+    let historyDisplay = previousInput;
+    if (currentOperator && !resetScreen) {
+        historyDisplay += ` ${currentOperator} ${currentInput}`;
+    }
+    displayHistory.textContent = historyDisplay;
 }
+
 // Basic arithmetic functions
 const add = (a, b) => a + b;
 const subtract = (a, b) => a - b;
@@ -109,6 +114,7 @@ function evaluate() {
         return;
     }
     currentInput = formatResult(calculation);
+    displayHistory.textContent += ` = ${currentInput}`; // Display the complete operation
     previousInput = '';
     currentOperator = null;
     resetScreen = true;
