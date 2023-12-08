@@ -26,11 +26,7 @@ function resetCalculator() {
 // Update display screen
 function updateDisplay() {
     displayCurrent.textContent = currentInput;
-    let historyDisplay = previousInput;
-    if (currentOperator && !resetScreen) {
-        historyDisplay += ` ${currentOperator} ${currentInput}`;
-    }
-    displayHistory.textContent = historyDisplay;
+    displayHistory.textContent = previousInput;
 }
 
 // Basic arithmetic functions
@@ -55,14 +51,10 @@ function operate(operator, a, b) {
 // Handle digit button click
 function inputDigit(digit) {
     if (resetScreen) {
-        currentInput = digit === '0' ? '0' : digit;
+        currentInput = digit;
         resetScreen = false;
     } else {
-        if (currentInput === '0' && digit !== '0') {
-            currentInput = digit;
-        } else if (currentInput !== '0') {
-            currentInput += digit;
-        }
+        currentInput = currentInput === '0' ? digit : currentInput + digit;
     }
     updateDisplay();
 }
@@ -77,55 +69,35 @@ function inputDecimal() {
 
 // Handle delete input
 function deleteDigit() {
-    // Delete the last digit or set current input to zero if all digits are deleted
     currentInput = currentInput.slice(0, -1) || '0';
     updateDisplay();
 }
 
 // Handle operator input
 function inputOperator(operator) {
-    if (currentInput === '' || currentInput === '0') {
-        // If current input is empty or zero, use the previous result
+    if (currentOperator !== null && !resetScreen) {
         if (previousInput !== '') {
-            currentOperator = operator;
-            resetScreen = true;
+            currentInput = String(operate(currentOperator, previousInput, currentInput));
             updateDisplay();
         }
-        // Do nothing if there's no previous result
-    } else {
-        // Perform calculation if an operator was already chosen
-        if (currentOperator !== null && !resetScreen) {
-            currentInput = String(operate(currentOperator, previousInput, currentInput));
-        }
-        previousInput = currentInput;
-        currentOperator = operator;
-        resetScreen = true;
-        updateDisplay();
     }
+    previousInput = currentInput;
+    currentOperator = operator;
+    resetScreen = true;
 }
 
 // Perform calculation and update display
 function evaluate() {
-    if (!currentOperator || resetScreen) return;
+    if (currentOperator === null || resetScreen) return;
     const calculation = operate(currentOperator, previousInput, currentInput);
     if (calculation === null) {
         alert("Can't divide by zero!");
-        resetCalculator();
         return;
     }
-    currentInput = formatResult(calculation);
-    displayHistory.textContent += ` = ${currentInput}`; // Display the complete operation
-    previousInput = '';
+    currentInput = String(calculation);
     currentOperator = null;
     resetScreen = true;
     updateDisplay();
-}
-
-function formatResult(result) {
-    if (result.toString().length > 10) { // Adjust the length as needed
-        return result.toPrecision(10); // Use scientific notation for large numbers
-    }
-    return String(result);
 }
 
 // Adding event listeners to buttons
@@ -136,24 +108,15 @@ clearButton.addEventListener('click', resetCalculator);
 deleteButton.addEventListener('click', deleteDigit);
 decimalButton.addEventListener('click', inputDecimal);
 
+// Initialize calculator
+resetCalculator();
+
 // Keyboard support
 window.addEventListener('keydown', (e) => {
     if (e.key.match(/[0-9]/)) inputDigit(e.key);
     else if (e.key === '.') inputDecimal();
-    else if (e.key.match(/[\+\*\/]/)) inputOperator(e.key);
+    else if (e.key.match(/[\+\-\*\/]/)) inputOperator(e.key);
     else if (e.key === 'Enter' || e.key === '=') evaluate();
     else if (e.key === 'Backspace') deleteDigit();
     else if (e.key === 'Escape') resetCalculator();
-    else if (e.key === '-') {
-        if (currentInput === '' || currentInput === '0' || resetScreen) {
-            currentInput = '-';
-            resetScreen = false;
-            updateDisplay();
-        } else {
-            inputOperator('-');
-        }
-    }
 });
-
-// Initialize calculator
-resetCalculator();
